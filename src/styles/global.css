@@ -1,0 +1,46 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #fef3f8 0%, #fffef0 50%, #f0fef5 100%);
+  min-height: 100vh;
+  color: #4a4a4a;
+}
+
+/* Colores pasteles */
+:root {
+  --pink: #FFB6D9;
+  --light-pink: #FFD6E8;
+  --dark-pink: #FF9BC5;
+  --yellow: #FFF4B0;
+  --light-yellow: #FFFAD0;
+  --green: #B6E8C3;
+  --light-green: #D0F5E0;
+  --dark-green: #8FD9B8;
+  --white: #FFFFFF;
+  --text: #4a4a4a;
+  --light-text: #7a7a7a;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 182, 217, 0.1);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--pink);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dark-pink);
+}

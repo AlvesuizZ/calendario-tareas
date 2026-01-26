@@ -1,0 +1,175 @@
+.calendar-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.calendar-card {
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(255, 182, 217, 0.15);
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 182, 217, 0.2);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
+}
+
+.calendar-header h2 {
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 600;
+  flex: 1;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.nav-button {
+  background: linear-gradient(135deg, var(--light-pink), var(--light-yellow));
+  border: none;
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  width: 44px;
+  height: 44px;
+}
+
+.nav-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 182, 217, 0.2);
+}
+
+.nav-button:active {
+  transform: translateY(0);
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 15px;
+}
+
+.weekday {
+  text-align: center;
+  font-weight: 600;
+  color: var(--light-text);
+  font-size: 14px;
+  padding: 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+.day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  color: var(--text);
+  background: var(--light-yellow);
+  flex-direction: column;
+  gap: 4px;
+  font-size: 14px;
+}
+
+.day.empty {
+  background: transparent;
+  cursor: default;
+}
+
+.day.active:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(255, 182, 217, 0.25);
+  background: linear-gradient(135deg, var(--light-pink), var(--light-green));
+}
+
+.day-number {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.task-indicator {
+  width: 22px;
+  height: 22px;
+  background: var(--pink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+/* Colores alternados en el calendario para más dinamismo */
+.day:nth-child(7n+1) {
+  background: var(--light-pink);
+}
+
+.day:nth-child(7n+2) {
+  background: var(--light-yellow);
+}
+
+.day:nth-child(7n+3) {
+  background: var(--light-green);
+}
+
+.day:nth-child(7n+4) {
+  background: var(--light-pink);
+}
+
+.day:nth-child(7n+5) {
+  background: var(--light-yellow);
+}
+
+.day:nth-child(7n+6) {
+  background: var(--light-green);
+}
+
+.day:nth-child(7n+7) {
+  background: var(--light-pink);
+}
+
+@media (max-width: 600px) {
+  .calendar-card {
+    padding: 20px;
+  }
+
+  .calendar-header h2 {
+    font-size: 20px;
+  }
+
+  .day {
+    font-size: 12px;
+  }
+
+  .day-number {
+    font-size: 14px;
+  }
+}
