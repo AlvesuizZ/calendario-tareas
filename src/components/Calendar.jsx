@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, LogOut } from 'lucide-react'
 import TaskModal from './TaskModal'
 import '../styles/calendar.css'
 
-const getInitialTasks = () => {
-  const savedTasks = localStorage.getItem('tasks')
-  return savedTasks ? JSON.parse(savedTasks) : {}
+const getInitialTasks = (username) => {
+  const allTasks = localStorage.getItem('tasks')
+  const tasks = allTasks ? JSON.parse(allTasks) : {}
+  // Retorna solo las tareas del usuario actual
+  return tasks[username] || {}
 }
 
-export default function Calendar() {
+export default function Calendar({ currentUser, onLogout }) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState(null)
   const [showModal, setShowModal] = useState(false)
-  const [tasks, setTasks] = useState(getInitialTasks())
+  const [tasks, setTasks] = useState(getInitialTasks(currentUser.username))
 
-  // Guardar tareas en localStorage
+  // Guardar tareas en localStorage (organizadas por usuario)
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks))
-  }, [tasks])
+    const allTasks = localStorage.getItem('tasks')
+    const tasksData = allTasks ? JSON.parse(allTasks) : {}
+    tasksData[currentUser.username] = tasks
+    localStorage.setItem('tasks', JSON.stringify(tasksData))
+  }, [tasks, currentUser.username])
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
@@ -96,6 +101,15 @@ export default function Calendar() {
   return (
     <div className="calendar-container">
       <div className="calendar-card">
+        <div className="calendar-header-top">
+          <div className="user-info">
+            <span className="username">👤 {currentUser.username}</span>
+          </div>
+          <button onClick={onLogout} className="logout-button" title="Cerrar sesión">
+            <LogOut size={20} />
+          </button>
+        </div>
+
         <div className="calendar-header">
           <button onClick={handlePrevMonth} className="nav-button">
             <ChevronLeft size={24} />

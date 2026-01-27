@@ -17,6 +17,51 @@
   border: 1px solid rgba(255, 182, 217, 0.2);
 }
 
+.calendar-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid var(--light-pink);
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.username {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.logout-button {
+  background: linear-gradient(135deg, var(--light-pink), var(--light-yellow));
+  border: none;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  width: 40px;
+  height: 40px;
+}
+
+.logout-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 182, 217, 0.2);
+}
+
+.logout-button:active {
+  transform: translateY(0);
+}
+
 .calendar-header {
   display: flex;
   justify-content: space-between;
