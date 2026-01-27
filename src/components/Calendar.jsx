@@ -1,28 +1,41 @@
 import React, { useState, useEffect } from 'react'
 import { ChevronLeft, ChevronRight, LogOut } from 'lucide-react'
 import TaskModal from './TaskModal'
+import { getTasksByMonth } from '../lib/tasks-supabase'
 import '../styles/calendar.css'
-
-const getInitialTasks = (username) => {
-  const allTasks = localStorage.getItem('tasks')
-  const tasks = allTasks ? JSON.parse(allTasks) : {}
-  // Retorna solo las tareas del usuario actual
-  return tasks[username] || {}
-}
 
 export default function Calendar({ currentUser, onLogout }) {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [selectedDate, setSelectedDate] = useState(null)
   const [showModal, setShowModal] = useState(false)
-  const [tasks, setTasks] = useState(getInitialTasks(currentUser.username))
+  const [tasks, setTasks] = useState({})
 
-  // Guardar tareas en localStorage (organizadas por usuario)
+  // Cargar tareas del mes actual
   useEffect(() => {
-    const allTasks = localStorage.getItem('tasks')
-    const tasksData = allTasks ? JSON.parse(allTasks) : {}
-    tasksData[currentUser.username] = tasks
-    localStorage.setItem('tasks', JSON.stringify(tasksData))
-  }, [tasks, currentUser.username])
+    const loadTasks = async () => {
+      try {
+        const monthTasks = await getTasksByMonth(
+          currentUser.id,
+          currentDate.getFullYear(),
+          currentDate.getMonth() + 1
+        )
+        
+        // Organizar tareas por fecha
+        const tasksByDate = {}
+        monthTasks.forEach(task => {
+          if (!tasksByDate[task.task_date]) {
+            tasksByDate[task.task_date] = []
+          }
+          tasksByDate[task.task_date].push(task)
+        })
+        setTasks(tasksByDate)
+      } catch (error) {
+        console.error('Error loading tasks:', error)
+      }
+    }
+
+    loadTasks()
+  }, [currentDate, currentUser.id])
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
@@ -50,36 +63,6 @@ export default function Calendar({ currentUser, onLogout }) {
     setShowModal(true)
   }
 
-  const handleAddTask = (taskData) => {
-    const dateKey = formatDate(selectedDate)
-    const newTask = {
-      id: Date.now(),
-      ...taskData
-    }
-
-    setTasks(prev => ({
-      ...prev,
-      [dateKey]: [...(prev[dateKey] || []), newTask]
-    }))
-  }
-
-  const handleDeleteTask = (taskId) => {
-    const dateKey = formatDate(selectedDate)
-    setTasks(prev => ({
-      ...prev,
-      [dateKey]: prev[dateKey].filter(task => task.id !== taskId)
-    }))
-  }
-
-  const handleEditTask = (taskId, updatedData) => {
-    const dateKey = formatDate(selectedDate)
-    setTasks(prev => ({
-      ...prev,
-      [dateKey]: prev[dateKey].map(task =>
-        task.id === taskId ? { ...task, ...updatedData } : task
-      )
-    }))
-  }
 
   const daysInMonth = getDaysInMonth(currentDate)
   const firstDay = getFirstDayOfMonth(currentDate)
@@ -158,11 +141,8 @@ export default function Calendar({ currentUser, onLogout }) {
       {showModal && selectedDate && (
         <TaskModal
           date={selectedDate}
-          tasks={tasks[formatDate(selectedDate)] || []}
+          currentUser={currentUser}
           onClose={() => setShowModal(false)}
-          onAddTask={handleAddTask}
-          onDeleteTask={handleDeleteTask}
-          onEditTask={handleEditTask}
         />
       )}
     </div>

@@ -46,6 +46,16 @@
   }
 }
 
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
 .modal-header {
   display: flex;
   justify-content: space-between;
@@ -89,6 +99,22 @@
   display: flex;
   flex-direction: column;
   gap: 25px;
+}
+
+.alert {
+  padding: 12px 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  border: 1px solid;
+}
+
+.alert-error {
+  background: rgba(255, 182, 217, 0.2);
+  color: var(--dark-pink);
+  border-color: var(--pink);
 }
 
 .tasks-section h3,
@@ -336,4 +362,83 @@
   .task-notes {
     margin-left: 0;
   }
+}
+
+.task-notes {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.task-notes:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-left-color: var(--pink);
+}
+
+.task-notes-empty {
+  background: rgba(255, 255, 255, 0.6);
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin-left: 42px;
+  border-left: 2px dashed var(--light-green);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.task-notes-empty:hover {
+  background: rgba(255, 255, 255, 0.9);
+  border-left-color: var(--pink);
+  border-left-style: solid;
+}
+
+.task-notes-edit {
+  margin-left: 42px;
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.edit-notes-input {
+  padding: 12px;
+  border: 2px solid var(--pink);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--text);
+  background: var(--white);
+  min-height: 80px;
+  resize: vertical;
+  max-height: 150px;
+  transition: all 0.3s ease;
+}
+
+.edit-notes-input:focus {
+  outline: none;
+  border-color: var(--dark-pink);
+  box-shadow: 0 0 0 3px rgba(255, 182, 217, 0.1);
+}
+
+.save-notes-button {
+  background: var(--green);
+  color: var(--white);
+  border: none;
+  border-radius: 8px;
+  padding: 10px 15px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  align-self: flex-end;
+}
+
+.save-notes-button:hover:not(:disabled) {
+  background: var(--dark-green);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(155, 207, 142, 0.3);
+}
+
+.save-notes-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }

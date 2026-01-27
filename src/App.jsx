@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Calendar from './components/Calendar'
 import AuthPage from './components/AuthPage'
-import { getCurrentUser, setCurrentUser, logoutUser } from './lib/auth'
+import { getCurrentUser, logoutUser, onAuthStateChange } from './lib/auth-supabase'
 import './styles/global.css'
 import './App.css'
 
@@ -11,19 +11,40 @@ function App() {
 
   useEffect(() => {
     // Verificar si hay usuario logueado al cargar la app
-    const user = getCurrentUser()
-    setUser(user)
-    setLoading(false)
+    const initializeAuth = async () => {
+      try {
+        const user = await getCurrentUser()
+        setUser(user)
+      } catch (error) {
+        console.error('Error initializing auth:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    initializeAuth()
+
+    // Escuchar cambios de autenticación
+    const subscription = onAuthStateChange((event, user) => {
+      setUser(user)
+    })
+
+    return () => {
+      subscription?.unsubscribe()
+    }
   }, [])
 
   const handleLogin = (user) => {
-    setCurrentUser(user)
     setUser(user)
   }
 
-  const handleLogout = () => {
-    logoutUser()
-    setUser(null)
+  const handleLogout = async () => {
+    try {
+      await logoutUser()
+      setUser(null)
+    } catch (error) {
+      console.error('Error logging out:', error)
+    }
   }
 
   if (loading) {

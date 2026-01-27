@@ -6,7 +6,7 @@ import {
   validatePassword, 
   getPasswordStrength,
   validateEmail 
-} from '../lib/auth'
+} from '../lib/auth-supabase'
 import '../styles/auth.css'
 
 export default function AuthPage({ onLogin }) {
@@ -55,8 +55,8 @@ export default function AuthPage({ onLogin }) {
 
     try {
       setLoading(true)
-      await registerUser(username, email, password)
-      setSuccess('¡Cuenta creada! Ahora inicia sesión')
+      await registerUser(email, password, username)
+      setSuccess('¡Cuenta creada! Verifica tu email para confirmar')
       setTimeout(() => {
         setIsRegistering(false)
         setUsername('')
@@ -76,15 +76,15 @@ export default function AuthPage({ onLogin }) {
     e.preventDefault()
     setError('')
 
-    if (!username.trim() || !password.trim()) {
-      setError('Usuario y contraseña son requeridos')
+    if (!email.trim() || !password.trim()) {
+      setError('Email y contraseña son requeridos')
       return
     }
 
     try {
       setLoading(true)
-      const user = await loginUser(username, password)
-      onLogin(user)
+      const result = await loginUser(email, password)
+      onLogin(result.user)
     } catch (err) {
       setError(err.message)
     } finally {
@@ -115,33 +115,33 @@ export default function AuthPage({ onLogin }) {
         )}
 
         <form onSubmit={isRegistering ? handleRegister : handleLogin} className="auth-form">
-          <div className="form-group">
-            <label htmlFor="username">Usuario</label>
-            <input
-              id="username"
-              type="text"
-              placeholder="Tu usuario"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              className="form-input"
-              disabled={loading}
-            />
-          </div>
-
           {isRegistering && (
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="username">Usuario</label>
               <input
-                id="email"
-                type="email"
-                placeholder="tu@email.com"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
+                id="username"
+                type="text"
+                placeholder="Tu usuario"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
                 className="form-input"
                 disabled={loading}
               />
             </div>
           )}
+
+          <div className="form-group">
+            <label htmlFor="email">{isRegistering ? 'Email' : 'Email'}</label>
+            <input
+              id="email"
+              type="email"
+              placeholder={isRegistering ? "tu@email.com" : "tu@email.com"}
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              className="form-input"
+              disabled={loading}
+            />
+          </div>
 
           <div className="form-group">
             <label htmlFor="password">Contraseña</label>
